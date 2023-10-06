@@ -5,6 +5,8 @@ const mobiMenu = document.querySelector('.mobile-menu')
 const iconCarrito = document.querySelector('.navbar-shopping-cart')
 const shoppingCartContainer = document.querySelector('#shoppingCartContainer')
 const cardsContainer = document.querySelector('.cards-container')
+const selectProduct = document.querySelector('#productDetail')
+const productDetailCloseIcon = document.querySelector('.product-detail-close')
 
 
 
@@ -12,7 +14,7 @@ const cardsContainer = document.querySelector('.cards-container')
 hamMenu.addEventListener('click', toogleMenu)
 navEmail.addEventListener('click', toogleChange)
 iconCarrito.addEventListener('click', toogleCarrito)
-
+productDetailCloseIcon.addEventListener('click', closeDetailProduct)
 
 
 function toogleChange() {
@@ -21,9 +23,14 @@ function toogleChange() {
     if (!isMobileMenuClosed) {
         shoppingCartContainer.classList.add('inactive')
     }
-
-
     deskMenu.classList.toggle('inactive')
+
+    const isProductDetailClose = selectProduct.classList.contains('inactive')
+    if (!isProductDetailClose) {
+        selectProduct.classList.add('inactive')
+    }
+
+
 }
 
 function toogleMenu() {
@@ -32,9 +39,10 @@ function toogleMenu() {
     if (!isMobileMenuClosed) {
         shoppingCartContainer.classList.add('inactive')
     }
-
-
+    closeDetailProduct()
     mobiMenu.classList.toggle('inactive')
+
+
 }
 
 function toogleCarrito() {
@@ -45,8 +53,32 @@ function toogleCarrito() {
 
     }
 
+    const isProductDetailClose = selectProduct.classList.contains('inactive')
+    if (!isProductDetailClose) {
+        selectProduct.classList.add('inactive')
+    }
+
     shoppingCartContainer.classList.toggle('inactive')
 }
+
+function openDetailProduct() {
+    shoppingCartContainer.classList.add('inactive')
+    selectProduct.classList.remove('inactive')
+
+}
+
+function closeDetailProduct() {
+    selectProduct.classList.add('inactive')
+}
+
+function toogleCarrito() {
+    mobiMenu.classList.add('inactive');
+    closeDetailProduct(); // Asegura que el detalle del producto se cierre al abrir el carrito.
+    shoppingCartContainer.classList.toggle('inactive');
+}
+
+
+
 
 const productList = [];
 productList.push({
@@ -72,9 +104,11 @@ function renderProducts(arr) {
     for (product of arr) {
         const productCard = document.createElement('div')
         productCard.classList.add('product-card');
+        productCard.addEventListener('click', openDetailProduct)
 
         const productImg = document.createElement('img')
         productImg.setAttribute('src', product.Image)
+
 
         const productInfo = document.createElement('div')
         productInfo.classList.add('product-info')
